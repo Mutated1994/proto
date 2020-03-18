@@ -187,7 +187,17 @@ func (r *RPC) parse(p *Parser) error {
 		pos, tok, lit = p.nextTypeName()
 	}
 	if tok != tIDENT {
-		return p.unexpected(lit, "rpc stream | returns type", r)
+		// todo rpc 使用外部包，目前不需要解析
+		err := p.unexpected(lit, "rpc stream | returns type", r)
+		_, tok1, lit1 := p.next()
+		if tok1 != tDOT {
+			return err
+		}
+		_, tok2, lit2 := p.next()
+		if tok2 == tRIGHTPAREN {
+			return err
+		}
+		lit = lit + lit1 + lit2
 	}
 	r.ReturnsType = lit
 	pos, tok, lit = p.next()

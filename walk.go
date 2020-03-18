@@ -23,95 +23,93 @@
 
 package proto
 
-import "context"
-
 // Handler is a type of function that accepts a Visitee.
-type Handler func(ctx context.Context, v Visitee)
+type Handler func(v Visitee)
 
 // Walk recursively pays a visit to all Visitees of a Proto and calls each handler with it.
-func Walk(ctx context.Context, proto *Proto, handlers ...Handler) {
-	walk(ctx, proto, handlers...)
+func Walk(proto *Proto, handlers ...Handler) {
+	walk(proto, handlers...)
 }
 
-func walk(ctx context.Context, container elementContainer, handlers ...Handler) {
+func walk(container elementContainer, handlers ...Handler) {
 	for _, eachElement := range container.elements() {
 		for _, eachFilter := range handlers {
-			eachFilter(ctx, eachElement)
+			eachFilter(eachElement)
 		}
 		if next, ok := eachElement.(elementContainer); ok {
-			walk(ctx, next, handlers...)
+			walk(next, handlers...)
 		}
 	}
 }
 
 // WithImport returns a Handler that will call the apply function when the Visitee is an Import.
-func WithImport(apply func(context.Context, *Import)) Handler {
-	return func(ctx context.Context, v Visitee) {
+func WithImport(apply func(*Import)) Handler {
+	return func(v Visitee) {
 		if s, ok := v.(*Import); ok {
-			apply(ctx, s)
+			apply(s)
 		}
 	}
 }
 
 // WithMessage returns a Handler that will call the apply function when the Visitee is a Message.
-func WithMessage(apply func(context.Context, *Message)) Handler {
-	return func(ctx context.Context, v Visitee) {
+func WithMessage(apply func(*Message)) Handler {
+	return func(v Visitee) {
 		if s, ok := v.(*Message); ok {
-			apply(ctx, s)
+			apply(s)
 		}
 	}
 }
 
 // WithOption returns a Handler that will call the apply function when the Visitee is a Option.
-func WithOption(apply func(context.Context, *Option)) Handler {
-	return func(ctx context.Context, v Visitee) {
+func WithOption(apply func(*Option)) Handler {
+	return func(v Visitee) {
 		if s, ok := v.(*Option); ok {
-			apply(ctx, s)
+			apply(s)
 		}
 	}
 }
 
 // WithEnum returns a Handler that will call the apply function when the Visitee is a Enum.
-func WithEnum(apply func(context.Context, *Enum)) Handler {
-	return func(ctx context.Context, v Visitee) {
+func WithEnum(apply func(*Enum)) Handler {
+	return func(v Visitee) {
 		if s, ok := v.(*Enum); ok {
-			apply(ctx, s)
+			apply(s)
 		}
 	}
 }
 
 // WithOneof returns a Handler that will call the apply function when the Visitee is a Oneof.
-func WithOneof(apply func(context.Context, *Oneof)) Handler {
-	return func(ctx context.Context, v Visitee) {
+func WithOneof(apply func(*Oneof)) Handler {
+	return func(v Visitee) {
 		if s, ok := v.(*Oneof); ok {
-			apply(ctx, s)
+			apply(s)
 		}
 	}
 }
 
 // WithService returns a Handler that will call the apply function when the Visitee is a Service.
-func WithService(apply func(context.Context, *Service)) Handler {
-	return func(ctx context.Context, v Visitee) {
+func WithService(apply func(*Service)) Handler {
+	return func(v Visitee) {
 		if s, ok := v.(*Service); ok {
-			apply(ctx, s)
+			apply(s)
 		}
 	}
 }
 
 // WithRPC returns a Handler that will call the apply function when the Visitee is a RPC.
-func WithRPC(apply func(context.Context, *RPC)) Handler {
-	return func(ctx context.Context, v Visitee) {
+func WithRPC(apply func(*RPC)) Handler {
+	return func(v Visitee) {
 		if s, ok := v.(*RPC); ok {
-			apply(ctx, s)
+			apply(s)
 		}
 	}
 }
 
 // WithPackage returns a Handler that will call the apply function when the Visitee is a Package.
-func WithPackage(apply func(context.Context, *Package)) Handler {
-	return func(ctx context.Context, v Visitee) {
+func WithPackage(apply func(*Package)) Handler {
+	return func(v Visitee) {
 		if s, ok := v.(*Package); ok {
-			apply(ctx, s)
+			apply(s)
 		}
 	}
 }
